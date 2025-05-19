@@ -8,7 +8,7 @@ async function createAdminAccount() {
     // Check if the admin account already exists
     const [existingUsers] = await connection.execute(
       'SELECT * FROM accounts WHERE email = ?',
-      ['annelob@gmail.com']
+      ['isaaclocaylocay@gmail.com']
     );
 
     if (existingUsers.length > 0) {
@@ -16,18 +16,18 @@ async function createAdminAccount() {
       return;
     }
 
-    // Hash the password 'admin123'
-    const hashedPassword = await bcrypt.hash('admin123', 10);
+    // Hash the password 'isaac123'
+    const hashedPassword = await bcrypt.hash('isaac123', 10);
 
     // Insert the admin account
     const [result] = await connection.execute(
       'INSERT INTO accounts (email, password, role, status, lastname) VALUES (?, ?, ?, ?, ?)',
-      ['annelob@gmail.com', hashedPassword, 'admin', 'Active', 'Admin']
+      ['isaaclocaylocay@gmail.com', hashedPassword, 'admin', 'Active', 'Admin']
     );
 
     console.log('✅ Admin account created with ID:', result.insertId);
-    console.log('Email: annelob@gmail.com');
-    console.log('Password: admin123');
+    console.log('Email: isaaclocaylocay@gmail.com');
+    console.log('Password: isaac123');
 
     // Optional: Insert employee record
     try {
@@ -35,7 +35,7 @@ async function createAdminAccount() {
         'INSERT INTO employees (acc_id, email, department, dept_id, position, date, status, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
         [
           result.insertId,
-          'annelob@gmail.com',
+          'isaaclocaylocay@gmail.com',
           'IT',
           2, // dept_id for IT (adjust as needed)
           'System Administrator',
