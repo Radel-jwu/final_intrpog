@@ -1,0 +1,98 @@
+.container {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.card {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 15px 20px;
+  
+  h5 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.25rem;
+  }
+}
+
+.card-body {
+  padding: 25px;
+  background-color: white;
+}
+
+label {
+  font-weight: 500;
+}
+
+.form-select, .form-control {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  
+  &:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  
+  &.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+    
+    &:hover, &:focus {
+      background-color: #0b5ed7;
+      border-color: #0a58ca;
+    }
+  }
+  
+  &.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+    
+    &:hover, &:focus {
+      background-color: #5c636a;
+      border-color: #565e64;
+    }
+  }
+  
+  &.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+    
+    &:hover, &:focus {
+      background-color: #bb2d3b;
+      border-color: #b02a37;
+    }
+  }
+}
+
+// Animations
+.btn {
+  transition: all 0.2s ease-in-out;
+  
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// Make sure rows of items have consistent spacing
+.row {
+  margin-bottom: 15px;
+}
+
