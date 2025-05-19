@@ -1,0 +1,70 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="card">
+  <div class="card-header">
+    {{ id ? 'Edit' : 'Add' }} Account
+  </div>
+  <div class="card-body">
+    <form (ngSubmit)="onSubmit()" #accountForm="ngForm">
+
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <label for="title" class="form-label">Title</label>
+          <select [(ngModel)]="account.title" name="title" class="form-select" required>
+            <option value="Mr">Mr</option>
+            <option value="Ms">Ms</option>
+            <option value="Mrs">Mrs</option>
+            <option value="Dr">Dr</option>
+
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label for="firstname" class="form-label">First Name</label>
+          <input type="text" class="form-control" name="firstname" [(ngModel)]="account.firstname" required>
+        </div>
+
+        <div class="col-md-5">
+          <label for="lastname" class="form-label">Last Name</label>
+          <input type="text" class="form-control" name="lastname" [(ngModel)]="account.lastname" required>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" name="email" [(ngModel)]="account.email" required>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="!id">
+        <div class="col-md-12">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" name="password" [(ngModel)]="account.password" required>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="role" class="form-label">Role</label>
+          <select [(ngModel)]="account.role" name="role" class="form-select" required>
+            <option value="Admin">admin</option>
+            <option value="User">user</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label for="status" class="form-label">Status</label>
+          <select [(ngModel)]="account.status" name="status" class="form-select" required>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

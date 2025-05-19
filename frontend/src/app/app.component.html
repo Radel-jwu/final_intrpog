@@ -1,0 +1,35 @@
+<header>
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <h1 style="color: white;">{{title}}</h1>
+    </div>
+    
+    <div class="navbar-menu">
+      <!-- Show these links only if user is logged in -->
+      <ul *ngIf="isLoggedIn">
+        <!-- Admin-only links -->
+        <li *ngIf="isAdmin"><a routerLink="/accounts" routerLinkActive="active">Accounts</a></li>
+        
+        <!-- Links for all authenticated users -->
+        <li><a routerLink="/employees" routerLinkActive="active">Employees</a></li>
+        <li><a routerLink="/departments" routerLinkActive="active">Departments</a></li>
+        <li><a routerLink="/requests" routerLinkActive="active">Requests</a></li>
+        
+        <!-- User info and logout -->
+        <li class="user-info">
+          <span *ngIf="currentUser">{{currentUser.email}}</span>
+          <button (click)="logout()" class="logout-btn">Logout</button>
+        </li>
+      </ul>
+      
+      <!-- Show these links if user is not logged in -->
+      <ul *ngIf="!isLoggedIn">
+        <li><a routerLink="/login" routerLinkActive="active">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main class="container">
+  <router-outlet></router-outlet>
+</main>  

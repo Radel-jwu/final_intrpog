@@ -1,0 +1,50 @@
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+<div class="card">
+    <div class="card-header">Accounts</div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+            <th>Title</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Edit</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let acc of accounts">        
+            <td>{{ acc.title }}</td>
+            <td>{{ acc.firstname }}</td>
+            <td>{{ acc.lastname }}</td>
+            <td>{{ acc.email }}</td>
+            <td>{{ acc.role }}</td>
+            <td [ngClass]="{
+                'text-success fw-bold': acc.status.toLowerCase() === 'active',
+                'text-danger fw-bold': acc.status.toLowerCase() === 'inactive'
+              }">
+            {{ acc.status }}
+          </td>         
+            
+            <td>
+                <button
+                  class="btn btn-sm btn-primary me-1"
+                  (click)="edit(acc.acc_id)"
+                >
+                  Edit
+                </button>
+              </td>
+            </tr>
+        </tbody>
+        </table>
+        <div class="text-center">
+        </div>
+        <button class="btn btn-primary" class="btn btn-primary float-end" (click)="add()">Add Account</button>
+    </div>
+  </div>

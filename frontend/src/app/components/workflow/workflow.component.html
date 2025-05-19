@@ -1,0 +1,158 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h5>Workflows for Employee: {{ formattedEmployeeId }}</h5>
+    </div>
+    <div class="card-body">
+      <!-- Loading spinner -->
+      <div *ngIf="isLoading" class="text-center py-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading workflows...</p>
+      </div>
+      
+      <!-- Error message -->
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+        <button class="btn btn-sm btn-outline-danger ms-3" (click)="loadWorkflows()">Retry</button>
+      </div>
+      
+      <!-- Department Transfer Cards -->
+      <div *ngIf="!isLoading && !error">
+        <div *ngFor="let workflow of getDepartmentTransfers()" class="card mb-2 shadow-sm">
+          <div class="card-body p-2">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="fw-bold text-dark" style="min-width: 160px;">Department Transfer</div>
+              <div class="flex-grow-1 text-start">{{ workflow.details }}</div>
+              <div class="d-flex align-items-center">
+                <span class="badge rounded-pill me-3" [ngClass]="{
+                  'bg-warning text-dark': workflow.status === 'Pending',
+                  'bg-success': workflow.status === 'Completed' || workflow.status === 'Approved',
+                  'bg-danger': workflow.status === 'Cancelled' || workflow.status === 'Rejected',
+                  'bg-info': workflow.status === 'In Progress'
+                }">
+                  {{ workflow.status }}
+                </span>
+                <select class="form-select form-select-sm" style="width: 140px;" (change)="updateWorkflowStatus(workflow.id, $event)">
+                  <option value="" selected disabled>Change status</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Cancelled">Cancel</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Workflows table -->
+      <div *ngIf="!isLoading && !error" class="table-responsive mt-4">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Details</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="getRegularWorkflows().length === 0 && getDepartmentTransfers().length === 0">
+              <td colspan="4" class="text-center">No workflows found for this employee.</td>
+            </tr>
+            <tr *ngFor="let workflow of getRegularWorkflows()">
+              <td>{{ workflow.type }}</td>
+              <td>{{ workflow.details }}</td>
+              <td>
+                <span class="badge" [ngClass]="{
+                  'bg-warning text-dark': workflow.status === 'Pending',
+                  'bg-success': workflow.status === 'Completed' || workflow.status === 'Approved',
+                  'bg-danger': workflow.status === 'Cancelled' || workflow.status === 'Rejected',
+                  'bg-info': workflow.status === 'In Progress'
+                }">
+                  {{ workflow.status }}
+                </span>
+              </td>
+              <td>
+                <select class="form-select form-select-sm" (change)="updateWorkflowStatus(workflow.id, $event)">
+                  <option value="" selected disabled>Change status</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Cancelled">Cancel</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="d-flex justify-content-between mt-3">
+        <button class="btn btn-secondary" (click)="navigateBack()">Back to Employees</button>
+        <button class="btn btn-primary" (click)="openAddWorkflowModal()">Add Workflow</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Workflow Modal -->
+  <div class="modal" [class.show]="showAddModal" [style.display]="showAddModal ? 'block' : 'none'" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add New Workflow</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form (submit)="addWorkflow()">
+            <div class="mb-3">
+              <label for="type" class="form-label">Type</label>
+              <select id="type" class="form-select" [(ngModel)]="newWorkflow.type" name="type" required>
+                <option value="" disabled selected>Select type</option>
+                <option value="Department Transfer">Department Transfer</option>
+                <option value="Equipment">Equipment Request</option>
+                <option value="Leave">Leave Request</option>
+                <option value="Training">Training Request</option>
+              </select>
+            </div>
+            <div class="mb-3" *ngIf="newWorkflow.type === 'Department Transfer'">
+              <label class="form-label">Transfer Details</label>
+              <div class="row g-2">
+                <div class="col-5">
+                  <label for="sourceDept" class="form-label small">From Department</label>
+                  <select id="sourceDept" class="form-select" [(ngModel)]="sourceDepartment" name="sourceDepartment" required>
+                    <option value="" disabled selected>Select source</option>
+                    <option *ngFor="let dept of departmentOptions" [value]="dept">{{ dept }}</option>
+                  </select>
+                </div>
+                <div class="col-2 d-flex align-items-end justify-content-center pb-1">
+                  <i class="bi bi-arrow-right"></i>
+                </div>
+                <div class="col-5">
+                  <label for="targetDept" class="form-label small">To Department</label>
+                  <select id="targetDept" class="form-select" [(ngModel)]="targetDepartment" name="targetDepartment" required>
+                    <option value="" disabled selected>Select target</option>
+                    <option *ngFor="let dept of departmentOptions" [value]="dept">{{ dept }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3" *ngIf="newWorkflow.type !== 'Department Transfer'">
+              <label for="details" class="form-label">Details</label>
+              <input type="text" class="form-control" id="details" [(ngModel)]="newWorkflow.details" name="details" 
+                     placeholder="e.g. Laptop (x1), Vacation (x5)" required>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+              <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal backdrop -->
+  <div class="modal-backdrop fade show" *ngIf="showAddModal"></div>
+</div>

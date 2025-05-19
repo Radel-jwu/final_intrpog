@@ -1,0 +1,82 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="card">
+  <div class="card-header">{{ isEditMode ? 'Edit' : 'Add' }} Employee</div>
+  <div class="card-body">
+    <div class="alert alert-danger" *ngIf="errorMessage">{{errorMessage}}</div>
+    <form>
+      <div class="mb-3">
+        <label for="employeeId" class="form-label">Employee ID</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="employee.emp_id"
+          name="emp_id"
+          readonly
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="account" class="form-label">Account</label>
+        <div *ngIf="isEditMode && employee.email" class="mb-2 text-info">
+          <small>Currently associated with account: <strong>{{ employee.email }}</strong></small>
+        </div>
+        <select class="form-select" id="acc_id" [(ngModel)]="employee.acc_id" name="acc_id" required>
+          <option value="" disabled selected>Select an account</option>
+          <option *ngFor="let acc of accounts" [value]="acc.acc_id">
+            {{ acc.email }} ({{ acc.firstname }} {{ acc.lastname }})
+          </option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="position" class="form-label">Position</label>
+        <input
+            type="text"
+            class="form-control"
+            id="position"
+            [(ngModel)]="employee.position"
+            name="position"
+            placeholder="Enter position"
+            required
+          />
+      </div>
+
+      <div class="mb-3">
+      <label for="department" class="form-label">Department</label>
+      <div *ngIf="isEditMode && employee.department" class="mb-2 text-info">
+        <small>Currently in department: <strong>{{ employee.department }}</strong></small>
+      </div>
+      <select class="form-select" id="department" [(ngModel)]="employee.dept_id" name="dept_id" required>
+        <option value="" disabled selected>Select a department</option>
+        <option *ngFor="let dept of departments" [value]="dept.dept_id">{{ dept.name }}</option>
+      </select>
+    </div>
+
+      <div class="mb-3">
+        <label for="hireDate" class="form-label">Hire Date</label>
+        <input
+          type="date"
+          class="form-control"
+          id="hireDate"
+          [(ngModel)]="employee.hire_date"
+          name="hire_date"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="status" class="form-label">Status</label>
+        <select class="form-select" id="status" [(ngModel)]="employee.status" name="status">
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+        </select>
+      </div>
+
+      <div class="text-center mt-3">
+        <button type="submit" class="btn btn-primary me-2" (click)="onSave()">Save</button>
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,93 @@
+.card {
+  margin: 50px auto;
+  margin-left:80px;
+  max-width: 1000px;             
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background-color: #ffffff;
+  display: block;                
+}
+.card-header {
+  color: black;
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 1.25rem;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.card-body {
+
+  padding: 2rem;
+  background-color: #fdfdfd;
+}
+
+.form-label {
+  font-weight: 1000;
+  color: #333;
+}
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+
+input.form-control,
+select.form-select {
+  width: 100%;       /* same width */
+  max-width: 100%;   /* same max width */
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  padding: 0.75rem;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input.form-control:focus,
+select.form-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
+}
+.alert-danger {
+  border-radius: 12px;
+  padding: 1rem;
+  font-weight: 500;
+}
+
+button.btn {
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  
+  border-radius: 30px;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+button.btn-primary {
+  background-color: #0d6efd;
+  color: #fff;
+  border: none;
+}
+
+button.btn-primary:hover {
+  background-color: #0b5ed7;
+  transform: scale(1.05);
+}
+
+button.btn-secondary {
+  background-color: #6c757d;
+  color: #fff;
+  border: none;
+}
+
+button.btn-secondary:hover {
+  background-color: #5a6268;
+  transform: scale(1.05);
+}
+
+.text-center {
+  margin-top: 1.5rem;
+}
