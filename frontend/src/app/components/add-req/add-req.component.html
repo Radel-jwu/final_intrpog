@@ -1,0 +1,105 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h5>{{ isEditMode ? 'EDIT REQUEST' : 'ADD REQUEST' }}</h5>
+    </div>
+    <div class="card-body">
+      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+      <div *ngIf="isLoading" class="d-flex justify-content-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      
+      <form (ngSubmit)="saveRequest()" #requestForm="ngForm" *ngIf="!isLoading">
+        <div class="mb-3">
+          <label for="type" class="form-label">Type</label>
+          <select 
+            id="type" 
+            name="type" 
+            class="form-select" 
+            [(ngModel)]="request.type" 
+            required>
+            <option value="Equipment">Equipment</option>
+            <option value="Leave">Leave</option>
+            <option value="Training">Training</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="employee" class="form-label">Employee</label>
+          <select 
+            id="employee" 
+            name="employee" 
+            class="form-select" 
+            [(ngModel)]="request.employeeId" 
+            required>
+            <option *ngFor="let emp of employees" [value]="emp.emp_id">
+              {{ formatEmployeeId(emp.emp_id) }}
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label">Items</label>
+          <div *ngFor="let item of request.items; let i = index" class="row mb-2">
+
+            <div class="col-md-6">
+              <label for="itemName{{i}}" class="small mb-1">Name</label>
+              <input 
+                type="text" 
+                id="itemName{{i}}" 
+                class="form-control" 
+                [(ngModel)]="item.name" 
+                name="itemName{{i}}" 
+                required>
+            </div>
+            <div class="col-md-4">
+              <label for="itemQuantity{{i}}" class="small mb-1">Quantity</label>
+              <input 
+                type="number" 
+                id="itemQuantity{{i}}" 
+                class="form-control" 
+                [(ngModel)]="item.quantity" 
+                name="itemQuantity{{i}}" 
+                min="1" 
+                required>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+              <button 
+                type="button" 
+                class="btn btn-danger w-100 mb-0" 
+                (click)="removeItem(i)" 
+                [disabled]="request.items.length <= 1">
+                Remove
+              </button>
+            </div>
+          </div>
+          <button 
+            type="button" 
+            class="btn btn-secondary mt-2" 
+            (click)="addItem()">
+            Add Item
+          </button>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <button 
+            type="button" 
+            class="btn btn-secondary" 
+            (click)="cancel()">
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            class="btn btn-primary" 
+            [disabled]="!requestForm.form.valid">
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
