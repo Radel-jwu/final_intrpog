@@ -165,31 +165,27 @@ export class AddReqComponent implements OnInit {
   }
 
   removeItem(index: number): void {
-    if (this.request.items.length > 1) {
-      this.request.items.splice(index, 1);
+    this.request.items.splice(index, 1);
+    if (this.request.items.length === 0) {
+      this.addItem(); // Always keep at least one item row
     }
   }
 
   saveRequest(): void {
-    if (!this.request.employeeId || !this.request.type || this.request.items.some(item => !item.name)) {
+    if (!this.request.employeeId || !this.request.type || this.request.items.some(item => !item.name || !item.quantity)) {
       this.error = 'Please fill out all required fields.';
       return;
     }
-
     this.isSaving = true;
     this.error = '';
-
     const formattedItems = this.requestService.formatRequestItems(this.request.items);
-
     const requestData = {
       emp_id: this.request.employeeId,
       type: this.request.type,
       items: formattedItems,
-      status: 'Pending'
+      status: this.request.status || 'Pending'
     };
-
     const requestIdParam = this.route.snapshot.paramMap.get('id');
-
     if (this.isEditMode && requestIdParam) {
       const id = Number(requestIdParam);
       this.requestService.updateRequest(id, requestData).subscribe({
@@ -198,7 +194,6 @@ export class AddReqComponent implements OnInit {
           this.router.navigate(['/requests']);
         },
         error: (err) => {
-          console.error('Error updating request:', err);
           this.error = 'Failed to update request.';
           this.isSaving = false;
         }
@@ -206,12 +201,11 @@ export class AddReqComponent implements OnInit {
     } else {
       this.requestService.addRequest(requestData).subscribe({
         next: () => {
-          alert('Request submitted successfully!');
+          alert('Request created successfully!');
           this.router.navigate(['/requests']);
         },
         error: (err) => {
-          console.error('Error saving request:', err);
-          this.error = 'Failed to save request.';
+          this.error = 'Failed to create request.';
           this.isSaving = false;
         }
       });

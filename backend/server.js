@@ -22,7 +22,6 @@ app.use('/api/accounts', accountsRouter);
 app.use('/api/employees', employeesRouter);
 app.use('/api/requests', requestsRouter);
 app.use('/api/workflows', workflowsRouter);
-app.use('/api', workflowsRouter); // Keep this for backward compatibility
 app.use('/api/request-approval', requestApprovalRouter);
 
 app.listen(PORT, () => {

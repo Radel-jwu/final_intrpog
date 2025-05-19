@@ -1,0 +1,16 @@
+.table {
+  margin-top: 1rem;
+}
+
+.badge {
+  padding: 0.5em 0.75em;
+}
+
+.btn-group {
+  gap: 0.5rem;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+} 

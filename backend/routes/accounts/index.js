@@ -82,7 +82,7 @@ router.post('/', async (req, res) => {
 // PUT update account (protected)
 router.put('/:id', auth, async (req, res) => {
   const id = req.params.id;
-  const { email, password, role } = req.body;
+  const { email, password, role, title, firstname, lastname, status } = req.body;
   
   // Only allow users to update their own account unless they're an admin
   if (req.user.id !== id && req.user.role !== 'admin') {
@@ -98,20 +98,48 @@ router.put('/:id', auth, async (req, res) => {
     let updateFields = [];
     let params = [];
     
+    if (title) {
+      updateFields.push('title = ?');
+      params.push(title);
+    }
+    
+    if (firstname) {
+      updateFields.push('firstname = ?');
+      params.push(firstname);
+    }
+    
+    if (lastname) {
+      updateFields.push('lastname = ?');
+      params.push(lastname);
+    }
+    
     if (email) {
       updateFields.push('email = ?');
       params.push(email);
     }
     
     if (password) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      updateFields.push('password = ?');
-      params.push(hashedPassword);
+      // Fetch current password hash
+      const [rows] = await db.query('SELECT password FROM accounts WHERE acc_id = ?', [id]);
+      const currentHash = rows[0]?.password;
+      if (password === currentHash) {
+        // Do not update password field, it's the same hash
+      } else {
+        // Hash only if it's a new plain password
+        const hashedPassword = await bcrypt.hash(password, 10);
+        updateFields.push('password = ?');
+        params.push(hashedPassword);
+      }
     }
     
     if (role) {
       updateFields.push('role = ?');
       params.push(role);
+    }
+    
+    if (status) {
+      updateFields.push('status = ?');
+      params.push(status);
     }
     
     if (updateFields.length === 0) {

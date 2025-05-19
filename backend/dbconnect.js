@@ -72,6 +72,20 @@ async function initializeDatabase() {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `);
 
+    // Add workflows table
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS workflows (
+        workflow_id INT(11) NOT NULL AUTO_INCREMENT,
+        emp_id INT(11) NOT NULL,
+        type TEXT NOT NULL,
+        details TEXT NOT NULL,
+        status TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (workflow_id),
+        KEY emp_id (emp_id)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    `);
+
     console.log("✅ Tables created and data inserted conditionally.");
   } catch (error) {
     console.error("❌ Error:", error.message);

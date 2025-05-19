@@ -1,0 +1,65 @@
+<div class="container mt-4">
+  <h2>Workflows</h2>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && workflows.length === 0" class="alert alert-info">
+    No workflows found.
+  </div>
+
+  <div *ngIf="!loading && workflows.length > 0" class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Employee ID</th>
+          <th>Type</th>
+          <th>Details</th>
+          <th>Status</th>
+          <th>Created At</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let workflow of workflows">
+          <td>{{ workflow.workflow_id }}</td>
+          <td>{{ workflow.emp_id }}</td>
+          <td>{{ workflow.type }}</td>
+          <td>{{ workflow.details }}</td>
+          <td>
+            <span [ngClass]="{
+              'badge bg-warning': workflow.status === 'Pending',
+              'badge bg-success': workflow.status === 'Completed',
+              'badge bg-danger': workflow.status === 'Rejected'
+            }">
+              {{ workflow.status }}
+            </span>
+          </td>
+          <td>{{ workflow.created_at | date:'medium' }}</td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-success" 
+                      (click)="updateStatus(workflow.workflow_id, 'Completed')"
+                      *ngIf="workflow.status !== 'Completed'">
+                Complete
+              </button>
+              <button class="btn btn-sm btn-danger" 
+                      (click)="updateStatus(workflow.workflow_id, 'Rejected')"
+                      *ngIf="workflow.status !== 'Rejected'">
+                Reject
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> 
