@@ -354,7 +354,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         console.log(`Department change detected: ${employee.dept_id} -> ${body.dept_id}`);
         
         // Decrement old department count
-        const oldDept = departments.find(x => x.dept_id === employee.dept_id);
+        const oldDept = departments.find(x => x.dept_id === employee?.dept_id);
         if (oldDept) {
           oldDept.employeeCount = Math.max(0, oldDept.employeeCount - 1);
           console.log(`Decremented old department (${oldDept.name}) count to ${oldDept.employeeCount}`);
@@ -406,7 +406,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         const dept = departments.find(d => d.name === body.department);
         if (dept) {
           // Get the old department first
-          const oldDept = departments.find(d => d.dept_id === employee.dept_id);
+          const oldDept = departments.find(d => d.dept_id === employee?.dept_id);
           if (oldDept && oldDept.name !== body.department) {
             // Ensure count never goes below zero
             oldDept.employeeCount = Math.max(0, oldDept.employeeCount - 1);
@@ -903,7 +903,7 @@ export function fakeBackendInterceptor(req: HttpRequest<any>, next: HttpHandlerF
       console.log(`Department change detected: ${employee.dept_id} -> ${body.dept_id}`);
       
       // Decrement old department count
-      const oldDept = departments.find(x => x.dept_id === employee.dept_id);
+      const oldDept = departments.find(x => x.dept_id === employee?.dept_id);
       if (oldDept) {
         oldDept.employeeCount = Math.max(0, oldDept.employeeCount - 1);
         console.log(`Decremented old department (${oldDept.name}) count to ${oldDept.employeeCount}`);
@@ -955,7 +955,7 @@ export function fakeBackendInterceptor(req: HttpRequest<any>, next: HttpHandlerF
       const dept = departments.find(d => d.name === body.department);
       if (dept) {
         // Get the old department first
-        const oldDept = departments.find(d => d.dept_id === employee.dept_id);
+        const oldDept = departments.find(d => d.dept_id === employee?.dept_id);
         if (oldDept && oldDept.name !== body.department) {
           // Ensure count never goes below zero
           oldDept.employeeCount = Math.max(0, oldDept.employeeCount - 1);

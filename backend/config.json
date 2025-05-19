@@ -3,7 +3,10 @@
     "host": "153.92.15.31",
     "user": "u875409848_munoz",
     "password": "9T2Z5$3UKkgSYzE",
-    "database": "u875409848_munoz"
+    "database": "u875409848_munoz",
+    "connectionLimit": 10,
+    "waitForConnections": true,
+    "queueLimit": 0
   },
   "secret": "your-random-secret",
   "emailFrom": "no-reply@yourapp.com",

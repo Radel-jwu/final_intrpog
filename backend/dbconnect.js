@@ -1,13 +1,35 @@
 const mysql = require('mysql2/promise');
-const config = require('./config.json');
 
-// Create a connection pool
-const pool = mysql.createPool(config.database);
+// Create a connection pool with retry logic
+const pool = mysql.createPool({
+  host: process.env.DB_HOST || '153.92.15.31',
+  user: process.env.DB_USER || 'u875409848_munoz',
+  password: process.env.DB_PASSWORD || '9T2Z5$3UKkgSYzE',
+  database: process.env.DB_NAME || 'u875409848_munoz',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 0
+});
+
+// Test the connection
+async function testConnection() {
+  try {
+    const connection = await pool.getConnection();
+    console.log('✅ Database connection successful');
+    connection.release();
+    return true;
+  } catch (error) {
+    console.error('❌ Database connection failed:', error.message);
+    return false;
+  }
+}
 
 async function tableExists(db, tableName) {
   const [rows] = await db.query(
     "SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema = ? AND table_name = ?",
-    [config.database.database, tableName]
+    [process.env.DB_NAME || 'u875409848_munoz', tableName]
   );
   return rows[0].count > 0;
 }
@@ -94,8 +116,27 @@ async function initializeDatabase() {
   }
 }
 
-// Initialize the database
-initializeDatabase();
+// Initialize the database with retry logic
+async function initializeWithRetry(maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      await initializeDatabase();
+      console.log('✅ Database initialization successful');
+      return;
+    } catch (error) {
+      console.error(`❌ Attempt ${i + 1} failed:`, error.message);
+      if (i === maxRetries - 1) throw error;
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds before retry
+    }
+  }
+}
+
+// Test connection and initialize
+testConnection().then(success => {
+  if (success) {
+    initializeWithRetry();
+  }
+});
 
 // Export the pool for use in other files
 module.exports = pool;
